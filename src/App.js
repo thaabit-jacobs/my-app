@@ -10,26 +10,30 @@ class App extends React.Component {
     {
       conversionRate:
       {
-        usd: 
+        USD: 
         {
-          eur: 0.91,
-          za: 15.04,
+          EUR: 0.91,
+          ZA: 15.04,
+          USD: 1.00
         },
-        za: 
+        ZA: 
         {
-          eur: 0.060,
-          usd: 0.066
+          EUR: 0.060,
+          USD: 0.066,
+          ZA: 1.00
         },
-        eur: 
+        EUR: 
         {
-          za: 16.54,
-          usd: 1.10
+          ZA: 16.54,
+          USD: 1.10,
+          EUR: 1.00
         }
       },
 
       from: "USD",
+      to: "ZA",
 
-      to: "ZA"
+      amount: 1.00
     }
 
     this.onChangeAmountInputHandler = this.onChangeAmountInputHandler.bind(this);
@@ -38,19 +42,26 @@ class App extends React.Component {
   }
 
   onChangeAmountInputHandler(event){
-    console.log(event.target.value);
+    this.setState({
+      amount: event.target.value
+    })
   }
 
   onChangeToSelectorHandler(event){
-    this.setState = ({
+    this.setState({
       to: event.target.value
     })
   }
 
   onChangeFromSelectorHandler(event){
-    this.setState = ({
+    this.setState({
       from: event.target.value
     })
+  }
+
+  roundOff (num) {
+    const x = Math.pow(10,2);
+    return Math.round(num * x) / x;
   }
 
   render() {
@@ -61,7 +72,7 @@ class App extends React.Component {
           <div className="input-grp">
             <div className="input-container">
               <label htmlFor="currencyAmount">Amount</label>
-              <input type="number" id="currencyAmount" name="currencyAmount" onChange={this.onChangeAmountInputHandler} min="0"/>
+              <input type="number" value={this.state.amount} id="currencyAmount" name="currencyAmount" onChange={this.onChangeAmountInputHandler} min="0"/>
             </div>
   
             <div className="input-container">
@@ -83,13 +94,19 @@ class App extends React.Component {
             </div>
           </div>
   
-          <div className="conversion-result-container">
-            <p className="conversion-result"><span className="from">1.00 USD</span> = <span className="to">0.87 EUR</span></p>
-          </div>
+          <Result amount={this.state.amount} from={this.state.from} result={this.roundOff(this.state.conversionRate[this.state.from][this.state.to] * this.state.amount)} to={this.state.to}/>
         </div>
       </div>
     );
   }
 }
 
+
+function Result(props){
+  return (
+    <div className="conversion-result-container">
+      <p className="conversion-result"><span className="from">{props.amount} {props.from}</span> = <span className="to">{props.result} {props.to}</span></p>
+    </div>
+  )
+}
 export default App;
