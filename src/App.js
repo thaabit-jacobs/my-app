@@ -70,28 +70,11 @@ class App extends React.Component {
         <h1>CURRENCY CONVERTER</h1>
         <div className="form-container">
           <div className="input-grp">
-            <div className="input-container">
-              <label htmlFor="currencyAmount">Amount</label>
-              <input type="number" value={this.state.amount} id="currencyAmount" name="currencyAmount" onChange={this.onChangeAmountInputHandler} min="0"/>
-            </div>
-  
-            <div className="input-container">
-              <label htmlFor="fromSelector">From</label>
-              <select value={this.state.from} id="fromSelector" name="fromSelector" onChange={this.onChangeFromSelectorHandler}>
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="ZA">ZA</option>
-                </select>
-            </div>
-  
-            <div className="input-container">
-              <label htmlFor="toSelector">To</label>
-              <select value={this.state.to} id="toSelector" name="toSelector" onChange={this.onChangeToSelectorHandler}>
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="ZA">ZA</option>
-                </select>
-            </div>
+            <AnountInput amount={this.state.amount} inputHanlder={this.onChangeAmountInputHandler}/>
+            
+            <CurrencySelector category={this.state.from} selectorHandlder={this.onChangeFromSelectorHandler}/>
+          
+            <CurrencySelector category={this.state.to} selectorHandlder={this.onChangeToSelectorHandler}/>  
           </div>
   
           <Result amount={this.state.amount} from={this.state.from} result={this.roundOff(this.state.conversionRate[this.state.from][this.state.to] * this.state.amount)} to={this.state.to}/>
@@ -101,6 +84,27 @@ class App extends React.Component {
   }
 }
 
+function AnountInput(props){
+  return  (
+    <div className="input-container">
+      <label htmlFor="currencyAmount">Amount</label>
+      <input type="number" value={props.amount} onChange={props.inputHanlder} min="0"/>
+  </div>
+  )
+}
+
+function CurrencySelector(props){
+  return (
+    <div className="input-container">
+      <label>{props.category}</label>
+      <select value={props.category} onChange={props.selectorHandlder}>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="ZA">ZA</option>
+      </select>
+    </div>
+  )
+}
 
 function Result(props){
   return (
